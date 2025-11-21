@@ -1,8 +1,9 @@
 public class Deck {
     private ArrayList<Integer> cards;
     private int cardsLeft;
-    public Deck(int[] ranks, String[] suits, double[] pointValues)
+    public Deck(String[] ranks, String[] suits, double[] pointValues)
     {
+        cards = new ArrayList<Integer> cards()
         this.cards = new ArrayList<>();
 
 
@@ -20,7 +21,7 @@ public class Deck {
     }
 
     public int getCardsLeft() {
-        return cardsLeft;
+        return this.cardsLeft;
     }
     public
 

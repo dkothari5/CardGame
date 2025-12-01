@@ -1,14 +1,21 @@
 import java.util.ArrayList;
-
 public class Deck {
-    import java.util. ArrayList
-    private ArrayList<Integer> cards;
+    private ArrayList<Card> theDeck;
     private int cardsLeft;
-    public Deck(String[] ranks, String[] suits, double[] pointValues)
+    public Deck(String[] ranks, String[] suits, int[] pointValues)
     {
-        this.cards = new ArrayList<>();
-        for(int i = 0; i<cards.size(); i++)
+        for(int i = 0; i < ranks.length; i++)
         {
+            for(int j = 0; j < suits.length; j++)
+            {
+                Card c = new Card(ranks[i], suits[j], pointValues[i]);
+                theDeck.add(c);
+            }
+            cardsLeft == theDeck.size();
+
+
+
+
 
         }
 
@@ -29,6 +36,22 @@ public class Deck {
     public int getCardsLeft() {
         return this.cardsLeft;
     }
+    public ArrayList<Card> deal()
+    {
+        if(cardsLeft == 0)
+        {
+            return null;
+        }
+        return theDeck.get(cardsLeft - 1);
+        cardsLeft--;
+
+    }
+    public void shuffle()
+    {
+        for(int i = 0; i < )
+
+    }
+
 
 
 }

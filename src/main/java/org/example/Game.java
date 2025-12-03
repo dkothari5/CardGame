@@ -1,10 +1,10 @@
 package org.example;
 
 public class Game {
-
-
-    static void main() {
+    public void playGame
+    {
 
     }
-
 }
+
+

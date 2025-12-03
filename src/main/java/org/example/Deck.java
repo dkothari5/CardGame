@@ -48,7 +48,13 @@ public class Deck {
     }
     public void shuffle()
     {
-        for(int i = 0; i < )
+        for(int i = theDeck.size() - 1; i <= 0; i++)
+        {
+            int num  = (int)(Math.random() * (i+1) + 0.5);
+            theDeck.remove(i);
+            theDeck.add(i, num);
+        }
+        cardsLeft() = theDeck.size();
 
     }
 

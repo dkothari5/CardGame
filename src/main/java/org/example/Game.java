@@ -1,13 +1,35 @@
 package org.example;
 
+import java.util.ArrayList;
+
 public class Game {
-    private Arraylist<Card> set;
+    private Deck cardDeck;
     public Game()
     {
+        String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+        String[] suits = {"Hearts", "Clubs", "Spades", "Diamonds"};
+        int [] values = {1,2,3,4,5,6,7,8,9,10,11,12,13};
+        cardDeck = new Deck(ranks, suits, values);
+        ArrayList<Player> currentPlayers;
+        currentPlayers = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("What is your name: ");
         String name = scanner.nextLine();
-
+        while(name != null)
+        {
+            Player d = new Player(name);
+            currentPlayers.add(d);
+            System.out.println("What is your name: ");
+            name = scanner.nextLine();
+        }
+        for(int i = 0; i < theDeck.size(); i++)
+        {
+            int playerIndex = 0;
+            int randomCard = (int)(Math.random() * theDeck.size());
+            currentPlayers.get(playerIndex).getHand().add(cardDeck.get(randomCard));
+            cardDeck.remove(randomCard);
+            playerIndex = (playerIndex + 1) % currentPlayers.size();
+        }
 
     }
     public void printInstructions()

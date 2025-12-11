@@ -1,7 +1,10 @@
+package org.example;
+
 public class Card {
     private String rank;
     private String suit;
     private int value;
+
     public Card(String rank, String suit, int value)
     {
         this.rank = rank;
@@ -33,6 +36,9 @@ public class Card {
         this.value = value;
     }
 
+    /* The toString method outputs the value of the card in a format that is easily understood
+    by the user.
+     */
     @Override
     public String toString() {
         return rank + " of " + suit;

@@ -1,13 +1,15 @@
 package org.example;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
+    private Gameview window;
     private Deck cardDeck;
     private ArrayList<Card> pot;
     private ArrayList<Player> currentPlayers;
     private String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-    private String[] suits = {"Hearts", "Clubs", "Spades", "Diamonds"};
+    private String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
     private int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 
     /* variables used to create smaller deck sizes for testing purposes */
@@ -20,6 +22,7 @@ public class Game {
     is distributed into across the hands of all the users.
      */
     public Game() {
+        this.window = new Gameview(this);
         pot = new ArrayList<>();
         cardDeck = new Deck(ranks, suits, values);
         cardDeck.shuffle();

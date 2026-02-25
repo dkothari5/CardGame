@@ -51,7 +51,7 @@ public class Card {
     public String toString() {
         return rank + " of " + suit;
     }
-    public void draw(Graphics g, int x, int y) {
+    public void draw(Graphics g, int x, int y, Gameview window) {
         g.drawImage(cardImage, x,y,CARD_WIDTH, CARD_HEIGHT, window);
     }
     public void drawBacks(Graphics g, Image i, int x, int y) {

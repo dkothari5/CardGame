@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
+import static org.example.Card.CARD_HEIGHT;
+import static org.example.Card.CARD_WIDTH;
+
 public class Gameview extends JFrame
 {
     private Image tableImage;
@@ -37,11 +40,17 @@ public class Gameview extends JFrame
         g.drawImage(cardBack, 400 - cardWith / 2, 400 - cardHeight / 2, cardWith, cardHeight, this);
 
         g.setFont(new Font("Serif", Font.BOLD, 50));
-        g.setColor(Color.white);
+        g.setColor(Color.black);
         g.drawString("Welcome to Cheat!", 250, 150);
         g.setFont(new Font("Serif", Font.BOLD, 20));
+
+        backend.getCurrentPlayers().get(0).getHand().get(0).draw(g,100, 500, this);
+
+
+
         int xInstructions = 25;
         int yInstruction = 525;
+
         //if (backend.getTheDeck().getCardsLeft() != 0) {
             //g.drawImage(cardBack, 400 - cardWith / 2, 400 - cardHeight / 2, cardWith, cardHeight, this);
         //}

@@ -38,6 +38,7 @@ public class Game {
         }
 
 
+
         /* This code block is used to distribute the deck of cards to all the players. One card at a time
         is removed from the deck (using the deal method) and is added to a user's hand. This process is repeated until
         the deck is empty.
@@ -47,7 +48,12 @@ public class Game {
             currentPlayers.get(playerIndex).addCard(cardDeck.deal());
             playerIndex = (playerIndex + 1) % currentPlayers.size();
         }
+        window.repaint();
 
+    }
+    public ArrayList<Player> getCurrentPlayers()
+    {
+        return currentPlayers;
     }
     public void draw(Graphics g)
     {

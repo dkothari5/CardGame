@@ -1,4 +1,5 @@
 package org.example;
+import javax.swing.*;
 import java.util.ArrayList;
 public class Deck {
     private ArrayList<Card> theDeck;
@@ -10,16 +11,19 @@ public class Deck {
      */
     public Deck(String[] ranks, String[] suits, int[] pointValues)
     {
+        int counter = 1;
         theDeck = new ArrayList<>();
         for(int i = 0; i < ranks.length; i++)
         {
             for(int j = 0; j < suits.length; j++)
             {
-                Card c = new Card(ranks[i], suits[j], pointValues[i]);
+                Card c = new Card(ranks[i], suits[j], pointValues[i], new ImageIcon("Resources/Cards/"+counter+".png").getImage());
+                counter++;
                 theDeck.add(c);
             }
         }
         cardsLeft = theDeck.size();
+        shuffle();
     }
 
     public ArrayList<Card> getTheDeck() {
@@ -28,11 +32,7 @@ public class Deck {
 
     public boolean isEmpty()
     {
-        if(cardsLeft == 0)
-        {
-            return true;
-        }
-        return false;
+        return cardsLeft == 0;
 
     }
 

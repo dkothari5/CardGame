@@ -1,20 +1,19 @@
 package org.example;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
-    private Gameview window;
     private Deck cardDeck;
     private ArrayList<Card> pot;
     private ArrayList<Player> currentPlayers;
     private String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
     private String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
     private int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+    private Gameview window;
 
-    /* variables used to create smaller deck sizes for testing purposes */
-    //private String[] ranks = {"A", "2", "3"};
-    //private int[] values = {1, 2, 3};
+
 
 
     /* The Game class constructor initializes several instance variables. To initialize the arrayList of players,
@@ -50,6 +49,12 @@ public class Game {
         }
 
     }
+    public void draw(Graphics g)
+    {
+
+
+    }
+
 
     /* The printInstructions method simply outputs a text description of the game. */
 
@@ -115,7 +120,7 @@ public class Game {
                         System.out.println("For card " + x + ", please enter the index of the card you want to play?");
                         index = input.nextInt();
                         pot.add(currentPlayers.get(j).getHand().get(index));
-                        if (currentPlayers.get(j).getHand().get(index).getRank() == ranks[rankIndex]) {
+                        if (currentPlayers.get(j).getHand().get(index).getRank().equals(ranks[rankIndex])) {
                             isRank = true;
                         }
                         currentPlayers.get(j).removeCard(index);
@@ -179,6 +184,14 @@ public class Game {
 
 
 
+    }
+    /* This is the main method which initializes the Game object and calls the playGame method which controls
+   the overall gameplay for "Cheat".
+ */
+    public static void main(String[] args)
+    {
+        Game c = new Game();
+        c.playGame();
     }
 }
 

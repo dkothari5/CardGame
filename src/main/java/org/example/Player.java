@@ -10,7 +10,7 @@ public class Player {
     /* This constructor method takes the player's name and is the variant used in my game. */
     public Player(String name) {
         this.name = name;
-        int points = 0;
+        this.points = 0;
         this.hand = new ArrayList<Card>();
     }
 

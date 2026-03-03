@@ -57,6 +57,33 @@ public class Player {
         }
         return printedHand;
     }
+    public void sort()
+    {
+        int n = hand.size();
+        boolean swapped;
+        for (int i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (int j = 0; j < n - i - 1; j++) {
+                if(hand.get(j).getValue() > hand.get(j+1).getValue())
+                {
+                    sortSwapper(j);
+                    swapped = true;
+                }
+            }
+            if(!swapped)
+            {
+                break;
+            }
+        }
+
+    }
+    private void sortSwapper(int index) {
+
+        Card temp = null;
+        temp = hand.get(index);
+        hand.set(index, hand.get(index + 1));
+        hand.set(index + 1, temp);
+    }
 
     public String toString()
     {

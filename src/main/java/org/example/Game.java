@@ -12,6 +12,7 @@ public class Game {
     private String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
     private int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
     private Gameview window;
+    private int currentPlayerIndex;
 
 
 
@@ -55,11 +56,6 @@ public class Game {
     {
         return currentPlayers;
     }
-    public void draw(Graphics g)
-    {
-
-
-    }
 
 
     /* The printInstructions method simply outputs a text description of the game. */
@@ -76,16 +72,20 @@ public class Game {
     }
 
 
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
     /* The playGame method controls the overall game-play for "Cheat". The high-level control mechanism is a while
-    loop that continues until the game is over (which is based on one player having an empty hand.) Each player takes turns
-    playing cards for the specified rank. A player plays cards by first declaring how many cards they wish to play on the turn,
-    and then specifying which cards they want to play via their index values. The assumption is that only the current player
-    should be viewing the terminal during their turn. After a player's turn, any other player can challenge (call "cheat").
-    If the challenge is successful, then the lying player takes all the cards from the central pot into their hand. And if the
-    challenge is not successful because the player was telling the truth, then the challenger receives all the cards from the
-    central pot. The game play continues by iterating through the card ranks, and with each player taking turns in sequence, until
-    one player has emptied their hand and becomes the winner.
-     */
+        loop that continues until the game is over (which is based on one player having an empty hand.) Each player takes turns
+        playing cards for the specified rank. A player plays cards by first declaring how many cards they wish to play on the turn,
+        and then specifying which cards they want to play via their index values. The assumption is that only the current player
+        should be viewing the terminal during their turn. After a player's turn, any other player can challenge (call "cheat").
+        If the challenge is successful, then the lying player takes all the cards from the central pot into their hand. And if the
+        challenge is not successful because the player was telling the truth, then the challenger receives all the cards from the
+        central pot. The game play continues by iterating through the card ranks, and with each player taking turns in sequence, until
+        one player has emptied their hand and becomes the winner.
+         */
     public void playGame() {
         boolean isRank = false;
         boolean isGameOver = false;
@@ -105,9 +105,11 @@ public class Game {
                     /* Display of the pot was added for testing purposes. */
                     //System.out.println("Here is what is in the pot:");
                     //System.out.println(pot);
-
+                    currentPlayerIndex = j;
                     System.out.println(currentPlayers.get(j).getName() + ": Here is your hand:");
                     System.out.println(currentPlayers.get(j).printHand());
+                    // add code here to display on the screen the user's hand
+
                     System.out.println(currentPlayers.get(j).getName() + ": How many " + ranks[rankIndex] + "s do you wish to play?");
                     declaration = input.nextInt();
                     while ((declaration <= 0) || (declaration > 4) || (declaration > currentPlayers.get(j).getHand().size())) {

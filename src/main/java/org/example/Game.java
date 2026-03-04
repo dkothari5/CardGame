@@ -13,6 +13,13 @@ public class Game {
     private int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
     private Gameview window;
     private int currentPlayerIndex;
+    private int lastTurnQuantity;
+    private String lastTurnRank;
+    private int gameState;
+    public static final int PREGAME_STATE = 0;
+    public static final int INTURN_STATE = 1;
+    public static final int POSTTURN_STATE = 2;
+    public static final int POSTGAME_STATE = 3;
 
 
 
@@ -24,9 +31,14 @@ public class Game {
     public Game() {
         this.window = new Gameview(this);
         pot = new ArrayList<>();
+        //String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+        //String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+        //int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         cardDeck = new Deck(ranks, suits, values);
         cardDeck.shuffle();
         int playerIndex = 0;
+        gameState = PREGAME_STATE;
+        printInstructions();
         currentPlayers = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("What is the first player's name (minimum of 2 players is required): ");
@@ -38,8 +50,6 @@ public class Game {
             name = scanner.nextLine();
         }
 
-
-
         /* This code block is used to distribute the deck of cards to all the players. One card at a time
         is removed from the deck (using the deal method) and is added to a user's hand. This process is repeated until
         the deck is empty.
@@ -49,6 +59,7 @@ public class Game {
             currentPlayers.get(playerIndex).addCard(cardDeck.deal());
             playerIndex = (playerIndex + 1) % currentPlayers.size();
         }
+        gameState = INTURN_STATE;
         window.repaint();
 
     }
@@ -61,14 +72,13 @@ public class Game {
     /* The printInstructions method simply outputs a text description of the game. */
 
     public void printInstructions() {
-        System.out.println("You will be given a hand of cards, and the specific rank of the card that must be played will " +
-                "start at the lowest rank and go up in increasing order. You must declare how many cards of the specific rank  you will " +
-                "be playing." + " This goes around to all of the players." + " You can lie about how many you have, but if" +
-                " someone else " + "correctly calls that you are lying, then you have to" + " pick up all of the cards from the " +
-                "central pile, which is where everyone has put their cards. However, if the challenging player" + "is wrong about you lying," +
-                " then they must pick up all of the cards in the pile. The first person to discard" + " all of their cards" +
-                " is the winner!");
-
+        System.out.println("\nYou will be given a hand of cards, and the specific rank of the card that must be played will ");
+        System.out.println("start at the lowest rank and go up in increasing order. You must declare how many cards of the specific rank you will");
+        System.out.println("be playing. This goes around to all of the players. You can lie about how many you have, but if");
+        System.out.println("someone else correctly calls that you are lying, then you have to pick up all of the cards from the");
+        System.out.println("central pile, which is where everyone has put their cards. However, if the challenging player is wrong about you lying,");
+        System.out.println("then they must pick up all of the cards in the pile. The first person to discard all of their cards");
+        System.out.println("is the winner!\n");
     }
 
 
@@ -96,9 +106,15 @@ public class Game {
         int winningPlayer = 0;
         Scanner input = new Scanner(System.in);
 
-        printInstructions();
+        //gameState = 0;
+        //printInstructions();
+        /*window.repaint();
+        int tempval = input.nextInt();
+        gameState = 1;
+        window.repaint();*/
 
         while (!isGameOver) {
+
             for (int j = 0; j < currentPlayers.size(); j++) {
                 if (!isGameOver) {
 
@@ -106,6 +122,10 @@ public class Game {
                     //System.out.println("Here is what is in the pot:");
                     //System.out.println(pot);
                     currentPlayerIndex = j;
+
+                    // the hand needs to be sorted
+
+                    currentPlayers.get(j).sort();
                     System.out.println(currentPlayers.get(j).getName() + ": Here is your hand:");
                     System.out.println(currentPlayers.get(j).printHand());
                     // add code here to display on the screen the user's hand
@@ -133,6 +153,12 @@ public class Game {
                         }
                         currentPlayers.get(j).removeCard(index);
                     }
+
+                    gameState = POSTTURN_STATE;
+                    lastTurnQuantity = declaration;
+                    lastTurnRank = ranks[rankIndex];
+                    window.repaint();
+                    System.out.println(currentPlayers.get(j).getName() + " played " + declaration + " " + ranks[rankIndex] + "s");
                     System.out.println("Does anyone think that they are lying and want to call cheat? Answer 1 if yes or answer 2 if no");
                     int cheatQuestion = input.nextInt();
 
@@ -185,6 +211,9 @@ public class Game {
                 if (rankIndex == ranks.length) {
                     rankIndex = 0;
                 }
+                if (isGameOver) gameState = POSTGAME_STATE;
+                else gameState = INTURN_STATE;
+                window.repaint();
             }
         }
         System.out.println("Congratulations " + currentPlayers.get(winningPlayer).getName() + " for winning this game!");
@@ -193,13 +222,31 @@ public class Game {
 
 
     }
+
+
+    public ArrayList<Card> getPot() {
+        return pot;
+    }
+
+    public int getGameState() {
+        return gameState;
+    }
+
     /* This is the main method which initializes the Game object and calls the playGame method which controls
-   the overall gameplay for "Cheat".
- */
+       the overall gameplay for "Cheat".
+     */
     public static void main(String[] args)
     {
         Game c = new Game();
         c.playGame();
+    }
+
+    public int getLastTurnQuantity() {
+        return lastTurnQuantity;
+    }
+
+    public String getLastTurnRank() {
+        return lastTurnRank;
     }
 }
 

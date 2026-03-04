@@ -9,8 +9,6 @@ public class Game {
     private ArrayList<Card> pot;
     private ArrayList<Player> currentPlayers;
     private String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-    private String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
-    private int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
     private Gameview window;
     private int currentPlayerIndex;
     private int lastTurnQuantity;
@@ -31,9 +29,8 @@ public class Game {
     public Game() {
         this.window = new Gameview(this);
         pot = new ArrayList<>();
-        //String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-        //String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
-        //int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+        String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+        int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         cardDeck = new Deck(ranks, suits, values);
         cardDeck.shuffle();
         int playerIndex = 0;
@@ -138,9 +135,8 @@ public class Game {
                         declaration = input.nextInt();
                     }
 
-                    /* After the current player declares how many cards they wish to play on this turn, they are
-                    then asked to specify which cards. Their hand is printed out to the screen to make it easier to
-                    identify which card(s) to play.
+                    /* The user's hand is printed out on the screen and they are prompted to select the index of the card
+                    they wish to play.
                      */
                     for (int x = 1; x <= declaration; x++) {
                         System.out.println(currentPlayers.get(j).getName() + ": Here is your hand:");

@@ -10,14 +10,11 @@ public class Deck {
     /* This constructor initializes the theDeck instance variable by adding a new Card for
     each unique combination of rank and suit.
      */
-    public Deck(String[] ranks, String[] suits, int[] pointValues)
-    {
+    public Deck(String[] ranks, String[] suits, int[] pointValues) {
         int counter = 1;
         theDeck = new ArrayList<>();
-        for(int i = 0; i < ranks.length; i++)
-        {
-            for(int j = 0; j < suits.length; j++)
-            {
+        for(int i = 0; i < ranks.length; i++) {
+            for(int j = 0; j < suits.length; j++) {
                 Card c = new Card(ranks[i], suits[j], pointValues[i], new ImageIcon("Resources/Cards/"+counter+".png").getImage());
                 counter++;
                 theDeck.add(c);
@@ -31,8 +28,7 @@ public class Deck {
         return theDeck;
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return cardsLeft == 0;
 
     }
@@ -44,8 +40,7 @@ public class Deck {
     /* The deal method returns a Card using the cardsLeft instance variable as an index. The method
     decrements the cardsLeft variable when dealing out one card.
      */
-    public Card deal()
-    {
+    public Card deal() {
         if(cardsLeft == 0)
         {
             return null;
@@ -57,12 +52,10 @@ public class Deck {
     /* The shuffle method simulates "shuffling the deck" by moving Cards within theDeck instance
     variable. Cards are moved to random positions using a randon number generator.
      */
-    public void shuffle()
-    {
+    public void shuffle() {
         Card temp  = null;
         int num = 0;
-        for(int i = theDeck.size() - 1; i >= 0; i--)
-        {
+        for(int i = theDeck.size() - 1; i >= 0; i--) {
             num  = (int)(Math.random() * (i+1));
             temp = theDeck.get(num);
             theDeck.set(num, theDeck.get(i));

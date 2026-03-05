@@ -70,7 +70,8 @@ public class Gameview extends JFrame {
     public ArrayList<Image> getImages() {
         return cardImages;
     }
-    // Draws pre-game display components
+
+    // Draws pre-game display components including instructions
     public void preGameDisplay(Graphics g) {
         g.setFont(new Font("Serif", Font.BOLD, HEADING_SIZE - 25));
         g.setColor(Color.black);
@@ -92,7 +93,8 @@ public class Gameview extends JFrame {
         g.setColor(Color.magenta);
         g.drawString("Please enter the players names in the console to get started...", xInstructions, yInstructions + (LINEBREAK_VERTICAL_SHIFT * 7));
     }
-    // Draws display components for a player's turn
+
+    // Draws display components for a player's turn, including the player's hand
     public void inTurnDisplay(Graphics g) {
 
         if (!backend.getPot().isEmpty()) {
@@ -104,11 +106,13 @@ public class Gameview extends JFrame {
         drawHand(g);
 
     }
-    // Displays the user's hand on the window
+    // Displays the user's hand in the display
     public void drawHand(Graphics g) {
         currentPlayer = backend.getCurrentPlayerIndex();
+
+        // determine the left position of the hand so that the hand is displayed horizontally centered, regardless of number of cards in the hand
         int cardsInHand = backend.getCurrentPlayers().get(currentPlayer).getHand().size();
-        int handWidth = (cardsInHand - 1) * 25 + CARD_WIDTH;
+        int handWidth = (cardsInHand - 1) * HORIZONTAL_SHIFT_BETWEEN_CARDS + CARD_WIDTH;
         int startXPosition = (WINDOW_WIDTH - handWidth) / 2;
         for (int i = 0; i < cardsInHand; i++) {
             backend.getCurrentPlayers().get(currentPlayer).getHand().get(i).draw(g, startXPosition + (i * HORIZONTAL_SHIFT_BETWEEN_CARDS), 500, this);
@@ -120,9 +124,8 @@ public class Gameview extends JFrame {
         g.drawString("Please play your turn using the console window...", startXPosition, 750);
 
     }
-        // Draws display components for post player turn
-        public void postTurnDisplay (Graphics g)
-        {
+        // Draws display components for post player turn (to manage the challenge process)
+        public void postTurnDisplay (Graphics g) {
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE));
             g.drawString(backend.getCurrentPlayers().get(currentPlayer).getName() + " played " + backend.getLastTurnQuantity() + " " + backend.getLastTurnRank() + "s", 100, 400);
             g.drawString("Do any of the other players want to challenge?", 100, 500);
@@ -130,19 +133,25 @@ public class Gameview extends JFrame {
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
             g.drawString("Please initiate or decline challenge using the console window...", 100, 600);
         }
-    // Sets up display to prompt the user to transition to the next player's turn
-    public void nextTurnDisplay (Graphics g)
-    {
+
+    // Sets up display to prompt the user to transition to the next player's turn so that a player doesn't see the prior player's hand
+    public void nextTurnDisplay (Graphics g) {
+        g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
+        if (backend.getChallengeStatus() == Game.CHALLENGE_SUCCESS) {
+            g.drawString("The challenge was successful!!!", 100, 300);
+        }
+        else if (backend.getChallengeStatus() == Game.CHALLENGE_FAILED) {
+            g.drawString("The challenge failed!!!", 100, 300);
+        }
         g.setColor(Color.MAGENTA);
         g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
         g.drawString("Press 1 when the next player is ready for their turn...", 100, 600);
     }
-    // Draws display components for post game state
+    // Draws display components for post game state, indicating which player won
     public void postGameDisplay (Graphics g){
             g.setColor(new Color(173, 216, 230));
             g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
             g.setColor(Color.black);
-            // Draws who the winner was or if it was a tie
             int winningPlayer = backend.getCurrentPlayerIndex();
             g.drawString(backend.getCurrentPlayers().get(winningPlayer).getName() + " wins!", (WINDOW_HEIGHT / 2) - 70, WINDOW_HEIGHT / 2);
         }

@@ -1,4 +1,6 @@
-// Card Game by Dylan Kothari
+// Card Game
+// * @author: Dylan Kothari
+// * @version: 3/4/26
 package org.example;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -14,20 +16,21 @@ public class Game {
     private int currentPlayerIndex;
     private int lastTurnQuantity;
     private String lastTurnRank;
+    private int challengeStatus = 0;
     private int gameState;
     public static final int PREGAME_STATE = 0;
     public static final int INTURN_STATE = 1;
     public static final int POSTTURN_STATE = 2;
     public static final int NEXTTURN_STATE = 3;
     public static final int POSTGAME_STATE = 4;
+    public static final int NO_CHALLENGE = 0;
+    public static final int CHALLENGE_SUCCESS = 1;
+    public static final int CHALLENGE_FAILED = 2;
 
 
 
 
-    /* The Game class constructor initializes several instance variables. To initialize the arrayList of players,
-    it asks the users to enter in their names in the terminal. After the players are created, the full deck of cards
-    is distributed into across the hands of all the users.
-     */
+    // The Game class constructor initializes several instance variables.
     public Game() {
         this.window = new Gameview(this);
         pot = new ArrayList<>();
@@ -38,6 +41,7 @@ public class Game {
         int playerIndex = 0;
         gameState = PREGAME_STATE;
         printInstructions();
+        // To initialize the ArrayList of players it asks the users to enter in their names in the terminal.
         currentPlayers = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("What is the first player's name (minimum of 2 players is required): ");
@@ -53,8 +57,7 @@ public class Game {
         is removed from the deck (using the deal method) and is added to a user's hand. This process is repeated until
         the deck is empty.
          */
-        while (!cardDeck.isEmpty())
-        {
+        while (!cardDeck.isEmpty()) {
             currentPlayers.get(playerIndex).addCard(cardDeck.deal());
             playerIndex = (playerIndex + 1) % currentPlayers.size();
         }
@@ -62,9 +65,12 @@ public class Game {
         window.repaint();
 
     }
-    public ArrayList<Player> getCurrentPlayers()
-    {
+    public ArrayList<Player> getCurrentPlayers() {
         return currentPlayers;
+    }
+
+    public int getChallengeStatus() {
+        return challengeStatus;
     }
 
 
@@ -118,18 +124,22 @@ public class Game {
                         declaration = input.nextInt();
                     }
 
+                    isRank = true;
+
+                    // loop to allow the user to indicate the specific cards to play from their hand
                     for (int x = 1; x <= declaration; x++) {
                         System.out.println(currentPlayers.get(j).getName() + ": Here is your hand:");
                         System.out.println(currentPlayers.get(j).printHand());
                         System.out.println("For card " + x + ", please enter the index of the card you want to play?");
                         index = input.nextInt();
                         pot.add(currentPlayers.get(j).getHand().get(index));
-                        if (currentPlayers.get(j).getHand().get(index).getRank().equals(ranks[rankIndex])) {
-                            isRank = true;
+                        if (!currentPlayers.get(j).getHand().get(index).getRank().equals(ranks[rankIndex])) {
+                            isRank = false;
                         }
                         currentPlayers.get(j).removeCard(index);
                     }
 
+                    // transition to post-turn state so that screen can display challenge-related steps
                     gameState = POSTTURN_STATE;
                     lastTurnQuantity = declaration;
                     lastTurnRank = ranks[rankIndex];
@@ -154,19 +164,22 @@ public class Game {
 
                         /* The boolean variable isRank is used to track whether all the cards played on this turn
                         matched the specified rank, which determines whether the success or failure of a potential challenge.
+                        The console is cleared to prevent the user from seeing information about the prior player's hand.
                          */
                         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                         // If the challenge fails, the cards will be moved from the pot to the challenger's hand.
                         if (isRank) {
                             System.out.println("The challenge failed");
+                            challengeStatus = CHALLENGE_FAILED;
                             while (pot.size() > 0) {
                                 currentPlayers.get(numChallengingPlayer).addCard(pot.get(0));
                                 pot.remove(0);
                             }
                         }
-                        // If the challenge succeeds, the cards will be moved from the pot to the lier's hand.
+                        // If the challenge succeeds, the cards will be moved from the pot to the liar's hand.
                         else {
                             System.out.println("The challenge was a success");
+                            challengeStatus = CHALLENGE_SUCCESS;
                             while (pot.size() > 0) {
                                 currentPlayers.get(j).addCard(pot.get(0));
                                 pot.remove(0);
@@ -190,19 +203,21 @@ public class Game {
                 gameState = NEXTTURN_STATE;
                 window.repaint();
 
-                System.out.println("Press 1 when the next player is ready for their turn.");
-                int readyInput = input.nextInt();
+
                 // Shifts to end game screen when game is over
                 if (isGameOver) gameState = POSTGAME_STATE;
-                else gameState = INTURN_STATE;
+                else
+                {
+                    // this input was added so that a player won't see prior player's information on the display
+                    System.out.println("Press 1 when the next player is ready for their turn.");
+                    int readyInput = input.nextInt();
+                    gameState = INTURN_STATE;
+                }
                 window.repaint();
+                challengeStatus = NO_CHALLENGE;
             }
         }
         System.out.println("Congratulations " + currentPlayers.get(winningPlayer).getName() + " for winning this game!");
-
-
-
-
     }
 
 

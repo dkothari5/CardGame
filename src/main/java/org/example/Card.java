@@ -6,14 +6,13 @@ public class Card {
     private String rank;
     private String suit;
     private int value;
-    private Gameview window;
+    private Gameview table;
     private Image cardImage;
     public static final int CARD_WIDTH = 100;
     public static final int CARD_HEIGHT = 150;
 
 
-    public Card(String rank, String suit, int value, Image cardImage)
-    {
+    public Card(String rank, String suit, int value, Image cardImage) {
         this.rank = rank;
         this.suit = suit;
         this.value = value;
@@ -51,11 +50,11 @@ public class Card {
     public String toString() {
         return rank + " of " + suit;
     }
-    public void draw(Graphics g, int x, int y, Gameview window) {
-        g.drawImage(cardImage, x,y,CARD_WIDTH, CARD_HEIGHT, window);
+    public void draw(Graphics g, int x, int y, Gameview table) {
+        g.drawImage(cardImage, x,y,CARD_WIDTH, CARD_HEIGHT, table);
     }
     // Draws the back of a card, which represents the pot
     public void drawBacks(Graphics g, Image i, int x, int y) {
-        g.drawImage(i, x,y,CARD_WIDTH, CARD_HEIGHT, window);
+        g.drawImage(i, x,y,CARD_WIDTH, CARD_HEIGHT, table);
     }
 }

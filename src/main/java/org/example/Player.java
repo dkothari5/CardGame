@@ -45,8 +45,7 @@ public class Player {
     }
 
     /* This printHand method was created to display the user's hand in the terminal in a way that each
-    card is shown by its index value. This is to help the user more easily indicate which card they wish
-    to play on any given turn (by entering in the corresponding index value).
+    card is shown by its index value.
      */
     public String printHand()
     {
@@ -57,6 +56,7 @@ public class Player {
         }
         return printedHand;
     }
+    // Bubble sort method to sort a hand by rank
     public void sort()
     {
         int n = hand.size();
@@ -77,6 +77,7 @@ public class Player {
         }
 
     }
+    // Helper method for sort to swap values between objects
     private void sortSwapper(int index) {
 
         Card temp = null;

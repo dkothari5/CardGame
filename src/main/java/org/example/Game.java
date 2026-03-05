@@ -13,11 +13,13 @@ public class Game {
     private int currentPlayerIndex;
     private int lastTurnQuantity;
     private String lastTurnRank;
+    //private Boolean
     private int gameState;
     public static final int PREGAME_STATE = 0;
     public static final int INTURN_STATE = 1;
     public static final int POSTTURN_STATE = 2;
-    public static final int POSTGAME_STATE = 3;
+    public static final int NEXTTURN_STATE = 3;
+    public static final int POSTGAME_STATE = 4;
 
 
 
@@ -181,6 +183,7 @@ public class Game {
                         matched the specified rank. Then that variable can be used to control the successful vs failed
                         challenge flows.
                          */
+                        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
                         if (isRank) {
                             System.out.println("The challenge failed");
                             while (pot.size() > 0) {
@@ -207,6 +210,12 @@ public class Game {
                 if (rankIndex == ranks.length) {
                     rankIndex = 0;
                 }
+                gameState = NEXTTURN_STATE;
+                window.repaint();
+
+                System.out.println("Press 1 when the next player is ready for their turn.");
+                int readyInput = input.nextInt();
+
                 if (isGameOver) gameState = POSTGAME_STATE;
                 else gameState = INTURN_STATE;
                 window.repaint();

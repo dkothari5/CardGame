@@ -54,6 +54,7 @@ public class Card {
     public void draw(Graphics g, int x, int y, Gameview window) {
         g.drawImage(cardImage, x,y,CARD_WIDTH, CARD_HEIGHT, window);
     }
+    // Draws the back of a card, which represents the pot
     public void drawBacks(Graphics g, Image i, int x, int y) {
         g.drawImage(i, x,y,CARD_WIDTH, CARD_HEIGHT, window);
     }

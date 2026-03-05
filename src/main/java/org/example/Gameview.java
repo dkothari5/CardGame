@@ -22,16 +22,16 @@ public class Gameview extends JFrame {
     private final int NORMAL_TEXT_SIZE = 40;
     private final int LINEBREAK_VERTICAL_SHIFT = 25;
     private final int HORIZONTAL_SHIFT_BETWEEN_CARDS = 25;
-
     private Game backend;
 
     public Gameview(Game backend) {
         this.backend = backend;
         currentPlayer = backend.getCurrentPlayerIndex();
+        // Saves card and table image files into Image objects
         cardBack = new ImageIcon("Resources/Cards/back.png").getImage();
         tableImage = new ImageIcon("Resources/cardtable.jpg").getImage();
 
-        // Setting up the window
+        // Sets up the window
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("CHEAT");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -39,23 +39,20 @@ public class Gameview extends JFrame {
     }
 
     public void paint(Graphics g) {
-        // draw permanent display components
+        // Draws permanent display components
         g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
         g.drawImage(tableImage, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, this);
         g.setFont(new Font("Arial", Font.BOLD, HEADING_SIZE));
         g.drawString("CHEAT", 380, 150);
 
-        // draw pre-game display components
         if (backend.getGameState() == Game.PREGAME_STATE) {
             preGameDisplay(g);
         }
 
-        // draw display components for a player's turn
         else if (backend.getGameState() == Game.INTURN_STATE) {
             inTurnDisplay(g);
         }
 
-        // draw display components for post player turn
         else if (backend.getGameState() == Game.POSTTURN_STATE) {
             postTurnDisplay(g);
         }
@@ -64,7 +61,6 @@ public class Gameview extends JFrame {
             nextTurnDisplay(g);
         }
 
-        // draw display components for for post game state
         else if (backend.getGameState() == Game.POSTGAME_STATE) {
             postGameDisplay(g);
         }
@@ -74,7 +70,7 @@ public class Gameview extends JFrame {
     public ArrayList<Image> getImages() {
         return cardImages;
     }
-
+    // Draws pre-game display components
     public void preGameDisplay(Graphics g) {
         g.setFont(new Font("Serif", Font.BOLD, HEADING_SIZE - 25));
         g.setColor(Color.black);
@@ -96,7 +92,7 @@ public class Gameview extends JFrame {
         g.setColor(Color.magenta);
         g.drawString("Please enter the players names in the console to get started...", xInstructions, yInstructions + (LINEBREAK_VERTICAL_SHIFT * 7));
     }
-
+    // Draws display components for a player's turn
     public void inTurnDisplay(Graphics g) {
 
         if (!backend.getPot().isEmpty()) {
@@ -108,7 +104,7 @@ public class Gameview extends JFrame {
         drawHand(g);
 
     }
-
+    // Displays the user's hand on the window
     public void drawHand(Graphics g) {
         currentPlayer = backend.getCurrentPlayerIndex();
         int cardsInHand = backend.getCurrentPlayers().get(currentPlayer).getHand().size();
@@ -124,6 +120,7 @@ public class Gameview extends JFrame {
         g.drawString("Please play your turn using the console window...", startXPosition, 750);
 
     }
+        // Draws display components for post player turn
         public void postTurnDisplay (Graphics g)
         {
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE));
@@ -133,22 +130,21 @@ public class Gameview extends JFrame {
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
             g.drawString("Please initiate or decline challenge using the console window...", 100, 600);
         }
-
+    // Sets up display to prompt the user to transition to the next player's turn
     public void nextTurnDisplay (Graphics g)
     {
         g.setColor(Color.MAGENTA);
         g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
         g.drawString("Press 1 when the next player is ready for their turn...", 100, 600);
     }
-
-        public void postGameDisplay (Graphics g){
+    // Draws display components for post game state
+    public void postGameDisplay (Graphics g){
             g.setColor(new Color(173, 216, 230));
             g.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
             g.setColor(Color.black);
             // Draws who the winner was or if it was a tie
             int winningPlayer = backend.getCurrentPlayerIndex();
             g.drawString(backend.getCurrentPlayers().get(winningPlayer).getName() + " wins!", (WINDOW_HEIGHT / 2) - 70, WINDOW_HEIGHT / 2);
-            //g.drawString("It's a Tie", (WINDOW_HEIGHT / 2) - 100, 400);
         }
 
 

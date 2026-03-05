@@ -1,3 +1,4 @@
+// Card Game by Dylan Kothari
 package org.example;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -13,7 +14,6 @@ public class Game {
     private int currentPlayerIndex;
     private int lastTurnQuantity;
     private String lastTurnRank;
-    //private Boolean
     private int gameState;
     public static final int PREGAME_STATE = 0;
     public static final int INTURN_STATE = 1;
@@ -85,16 +85,6 @@ public class Game {
         return currentPlayerIndex;
     }
 
-    /* The playGame method controls the overall game-play for "Cheat". The high-level control mechanism is a while
-        loop that continues until the game is over (which is based on one player having an empty hand.) Each player takes turns
-        playing cards for the specified rank. A player plays cards by first declaring how many cards they wish to play on the turn,
-        and then specifying which cards they want to play via their index values. The assumption is that only the current player
-        should be viewing the terminal during their turn. After a player's turn, any other player can challenge (call "cheat").
-        If the challenge is successful, then the lying player takes all the cards from the central pot into their hand. And if the
-        challenge is not successful because the player was telling the truth, then the challenger receives all the cards from the
-        central pot. The game play continues by iterating through the card ranks, and with each player taking turns in sequence, until
-        one player has emptied their hand and becomes the winner.
-         */
     public void playGame() {
         boolean isRank = false;
         boolean isGameOver = false;
@@ -104,42 +94,30 @@ public class Game {
         int numChallengingPlayer = 0;
         int winningPlayer = 0;
         Scanner input = new Scanner(System.in);
-
-        //gameState = 0;
-        //printInstructions();
-        /*window.repaint();
-        int tempval = input.nextInt();
-        gameState = 1;
-        window.repaint();*/
-
+        // While loop that continues until the game is over (which is based on one player having an empty hand.)
         while (!isGameOver) {
 
             for (int j = 0; j < currentPlayers.size(); j++) {
                 if (!isGameOver) {
 
-                    /* Display of the pot was added for testing purposes. */
-                    //System.out.println("Here is what is in the pot:");
-                    //System.out.println(pot);
+                    /* Keeps track of whose turn it is. */
                     currentPlayerIndex = j;
 
-                    // the hand needs to be sorted
-
+                    // The player's hand is sorted by rank
                     currentPlayers.get(j).sort();
+                    // Prints out hand to the user
                     System.out.println(currentPlayers.get(j).getName() + ": Here is your hand:");
                     System.out.println(currentPlayers.get(j).printHand());
-                    // add code here to display on the screen the user's hand
-
+                    // User is prompted to choose how many cards they wish to play
                     System.out.println(currentPlayers.get(j).getName() + ": How many " + ranks[rankIndex] + "s do you wish to play?");
                     declaration = input.nextInt();
                     while ((declaration <= 0) || (declaration > 4) || (declaration > currentPlayers.get(j).getHand().size())) {
                         System.out.println("You may only play between 1 and 4 cards per turn, and no more than the number of cards in your hand.");
+                        // User is prompted to select the indices of the cards they want to play
                         System.out.println(currentPlayers.get(j).getName() + ": How many " + ranks[rankIndex] + "s do you wish to play?");
                         declaration = input.nextInt();
                     }
 
-                    /* The user's hand is printed out on the screen and they are prompted to select the index of the card
-                    they wish to play.
-                     */
                     for (int x = 1; x <= declaration; x++) {
                         System.out.println(currentPlayers.get(j).getName() + ": Here is your hand:");
                         System.out.println(currentPlayers.get(j).printHand());
@@ -160,19 +138,14 @@ public class Game {
                     System.out.println("Does anyone think that they are lying and want to call cheat? Answer 1 if yes or answer 2 if no");
                     int cheatQuestion = input.nextInt();
 
-                    /* To streamline the game, we do not go around and ask each player if they want to challenge.
-                    Instead all players are asked at once, and if there is a challenger, then a follow-up question
-                    is asked to identify who the challenger is. This is important so we can correctly move the cards
-                    from the pot to the correct challenging player if the challenge fails.
-                     */
-
+                    // If there is a challenger, then a follow-up question is asked to identify who the challenger is.
                     if (cheatQuestion == 1) {
                         System.out.println("What player number is challenging?");
                         for (int i = 0; i < currentPlayers.size(); i++) {
                             System.out.println("Player " + i + ": " + currentPlayers.get(i).getName());
                         }
                         numChallengingPlayer = input.nextInt();
-
+                        // Reprompts the user if the index of the player challenging is the same as the one being challenged
                         while (numChallengingPlayer == j) {
                             System.out.println("A player can not challenge themselves. The challenge must be made by a different player number.");
                             System.out.println("What player number is challenging?");
@@ -180,17 +153,19 @@ public class Game {
                         }
 
                         /* The boolean variable isRank is used to track whether all the cards played on this turn
-                        matched the specified rank. Then that variable can be used to control the successful vs failed
-                        challenge flows.
+                        matched the specified rank, which determines whether the success or failure of a potential challenge.
                          */
                         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                        // If the challenge fails, the cards will be moved from the pot to the challenger's hand.
                         if (isRank) {
                             System.out.println("The challenge failed");
                             while (pot.size() > 0) {
                                 currentPlayers.get(numChallengingPlayer).addCard(pot.get(0));
                                 pot.remove(0);
                             }
-                        } else {
+                        }
+                        // If the challenge succeeds, the cards will be moved from the pot to the lier's hand.
+                        else {
                             System.out.println("The challenge was a success");
                             while (pot.size() > 0) {
                                 currentPlayers.get(j).addCard(pot.get(0));
@@ -199,23 +174,25 @@ public class Game {
                         }
                     }
                     isRank = false;
-                    // check to see if the current player has won
+                    // Check to see if the current player's hand is empty which means they have won
                     if (currentPlayers.get(j).getHand().isEmpty()) {
                         isGameOver = true;
                         winningPlayer = j;
                     }
 
                 }
+                // Iterates through ranks in increasing order and loops back
                 rankIndex++;
                 if (rankIndex == ranks.length) {
                     rankIndex = 0;
                 }
+                // Resets the window for the next user's turn
                 gameState = NEXTTURN_STATE;
                 window.repaint();
 
                 System.out.println("Press 1 when the next player is ready for their turn.");
                 int readyInput = input.nextInt();
-
+                // Shifts to end game screen when game is over
                 if (isGameOver) gameState = POSTGAME_STATE;
                 else gameState = INTURN_STATE;
                 window.repaint();
@@ -237,8 +214,7 @@ public class Game {
         return gameState;
     }
 
-    /* This is the main method which initializes the Game object and calls the playGame method which controls
-       the overall gameplay for "Cheat".
+    /* This is the main method which initializes the Game object and calls the playGame method
      */
     public static void main(String[] args)
     {

@@ -2,13 +2,15 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+import java.awt.event.MouseEvent;
 
 import static org.example.Card.CARD_HEIGHT;
 import static org.example.Card.CARD_WIDTH;
 
-public class Gameview extends JFrame {
+public class Gameview extends JFrame implements MouseListener {
     private Image tableImage;
     private Image cardBack;
     public static final int CARD_WIDTH = 100;
@@ -36,6 +38,9 @@ public class Gameview extends JFrame {
         this.setTitle("CHEAT");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setVisible(true);
+
+        // Adds mouse listener
+        this.addMouseListener(this);
     }
 
     public void paint(Graphics g) {
@@ -129,9 +134,24 @@ public class Gameview extends JFrame {
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE));
             g.drawString(backend.getCurrentPlayers().get(currentPlayer).getName() + " played " + backend.getLastTurnQuantity() + " " + backend.getLastTurnRank() + "s", 100, 400);
             g.drawString("Do any of the other players want to challenge?", 100, 500);
+
+            // Call Cheats that Chase Implemented
+            callCheatDisplay(g, 200, 650);
             g.setColor(Color.MAGENTA);
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
-            g.drawString("Please initiate or decline challenge using the console window...", 100, 600);
+            g.drawString("Please initiate or decline by selecting an option below...", 100, 600);
+        }
+
+        public void callCheatDisplay(Graphics g, int x, int y) {
+            g.setColor(new Color(103, 199, 52));
+            g.fillRect(x, y, 200, 100);
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", Font.BOLD, 28));
+            g.drawString("Truth", x+ 65, y + 60);
+            g.setColor(new Color(199, 52, 52));
+            g.fillRect(x + 400, y, 200, 100);
+            g.setColor(Color.black);
+            g.drawString("Lie", x + 480, y +60);
         }
 
     // Sets up display to prompt the user to transition to the next player's turn so that a player doesn't see the prior player's hand
@@ -156,7 +176,30 @@ public class Gameview extends JFrame {
             g.drawString(backend.getCurrentPlayers().get(winningPlayer).getName() + " wins!", (WINDOW_HEIGHT / 2) - 70, WINDOW_HEIGHT / 2);
         }
 
+    @Override
+    public void mousePressed(MouseEvent e) {
+        this.repaint();
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
 
     }
+
+
 
 

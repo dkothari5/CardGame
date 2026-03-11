@@ -27,6 +27,8 @@ public class Game {
     public static final int CHALLENGE_SUCCESS = 1;
     public static final int CHALLENGE_FAILED = 2;
 
+    // Chase's Instance Variables
+    private int cheatQuestion;
 
 
 
@@ -146,8 +148,7 @@ public class Game {
                     window.repaint();
                     System.out.println(currentPlayers.get(j).getName() + " played " + declaration + " " + ranks[rankIndex] + "s");
                     System.out.println("Does anyone think that they are lying and want to call cheat? Answer 1 if yes or answer 2 if no");
-                    int cheatQuestion = input.nextInt();
-
+                    cheatQuestion = input.nextInt();
                     // If there is a challenger, then a follow-up question is asked to identify who the challenger is.
                     if (cheatQuestion == 1) {
                         System.out.println("What player number is challenging?");
@@ -243,6 +244,11 @@ public class Game {
 
     public String getLastTurnRank() {
         return lastTurnRank;
+    }
+
+    // Chase's setter(s)
+    public void setCheatQuestion(int cheatQuestion) {
+        this.cheatQuestion = cheatQuestion;
     }
 }
 

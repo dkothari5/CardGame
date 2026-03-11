@@ -26,6 +26,12 @@ public class Gameview extends JFrame implements MouseListener {
     private final int HORIZONTAL_SHIFT_BETWEEN_CARDS = 25;
     private Game backend;
 
+    // Chase's instance variables
+    public static final int BUTTON_START_X = 200;
+    public static final int BUTTON_START_Y = 650;
+    public static final int BUTTON_WIDTH = 200;
+    public static final int BUTTON_HEIGHT  = 100;
+
     public Gameview(Game backend) {
         this.backend = backend;
         currentPlayer = backend.getCurrentPlayerIndex();
@@ -69,6 +75,8 @@ public class Gameview extends JFrame implements MouseListener {
         else if (backend.getGameState() == Game.POSTGAME_STATE) {
             postGameDisplay(g);
         }
+
+
 
     }
 
@@ -136,7 +144,8 @@ public class Gameview extends JFrame implements MouseListener {
             g.drawString("Do any of the other players want to challenge?", 100, 500);
 
             // Call Cheats that Chase Implemented
-            callCheatDisplay(g, 200, 650);
+            callCheatDisplay(g, BUTTON_START_X, BUTTON_START_Y);
+
             g.setColor(Color.MAGENTA);
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
             g.drawString("Please initiate or decline by selecting an option below...", 100, 600);
@@ -144,14 +153,25 @@ public class Gameview extends JFrame implements MouseListener {
 
         public void callCheatDisplay(Graphics g, int x, int y) {
             g.setColor(new Color(103, 199, 52));
-            g.fillRect(x, y, 200, 100);
+            g.fillRect(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
             g.setColor(Color.black);
             g.setFont(new Font("Arial", Font.BOLD, 28));
             g.drawString("Truth", x+ 65, y + 60);
             g.setColor(new Color(199, 52, 52));
-            g.fillRect(x + 400, y, 200, 100);
+            g.fillRect(x + 400, y, BUTTON_WIDTH, BUTTON_HEIGHT);
             g.setColor(Color.black);
             g.drawString("Lie", x + 480, y +60);
+        }
+
+        public void truthClicked() {
+            backend.setCheatQuestion(1);
+        }
+
+        public void falseClicked() {
+            backend.setCheatQuestion(2);
+        }
+
+        public void challengeTurnDisplay(Graphics g) {
         }
 
     // Sets up display to prompt the user to transition to the next player's turn so that a player doesn't see the prior player's hand
@@ -178,7 +198,16 @@ public class Gameview extends JFrame implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        this.repaint();
+        Rectangle truth = new Rectangle(BUTTON_START_X, BUTTON_START_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Rectangle lie = new Rectangle(BUTTON_START_X + 400, BUTTON_START_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        if (truth.contains(e.getX(), e.getY())) {
+            truthClicked();
+            this.repaint();
+        }
+        if (lie.contains(e.getX(), e.getY())) {
+            falseClicked();
+            this.repaint();
+        }
     }
 
     @Override

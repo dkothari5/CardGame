@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import static org.example.Card.CARD_HEIGHT;
 import static org.example.Card.CARD_WIDTH;
 
+// Implementing this class because it is a Java interface, so therfore I have to define all it's functions and implement.
 public class Gameview extends JFrame implements MouseListener {
     private Image tableImage;
     private Image cardBack;

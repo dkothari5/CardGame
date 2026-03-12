@@ -45,7 +45,7 @@ public class Gameview extends JFrame implements MouseListener {
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setVisible(true);
 
-        // Adds mouse listener
+        // Chase: adds mouse listener
         this.addMouseListener(this);
     }
 
@@ -151,6 +151,7 @@ public class Gameview extends JFrame implements MouseListener {
             g.drawString("Please initiate or decline by selecting an option below...", 100, 600);
         }
 
+        // Function for the creating buttons
         public void callCheatDisplay(Graphics g, int x, int y) {
             g.setColor(new Color(103, 199, 52));
             g.fillRect(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -163,15 +164,14 @@ public class Gameview extends JFrame implements MouseListener {
             g.drawString("Lie", x + 480, y +60);
         }
 
+        // Functions to change the variable of the cheat button and set off the code in the frontend once
+        // buttons are clicked.
         public void truthClicked() {
             backend.setCheatQuestion(1);
         }
 
         public void falseClicked() {
             backend.setCheatQuestion(2);
-        }
-
-        public void challengeTurnDisplay(Graphics g) {
         }
 
     // Sets up display to prompt the user to transition to the next player's turn so that a player doesn't see the prior player's hand
@@ -196,10 +196,18 @@ public class Gameview extends JFrame implements MouseListener {
             g.drawString(backend.getCurrentPlayers().get(winningPlayer).getName() + " wins!", (WINDOW_HEIGHT / 2) - 70, WINDOW_HEIGHT / 2);
         }
 
+    // Chase's code for the mouse events
     @Override
     public void mousePressed(MouseEvent e) {
+        // Returns if not in the correct state for the rectangles
+        if (backend.getGameState() != Game.POSTTURN_STATE) {
+            return;
+        }
+        // Creates new rectangle for the buttons
         Rectangle truth = new Rectangle(BUTTON_START_X, BUTTON_START_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
         Rectangle lie = new Rectangle(BUTTON_START_X + 400, BUTTON_START_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+        // Checks if the x and y of the mouse click is in the rectangles, and if so, set off the function.
         if (truth.contains(e.getX(), e.getY())) {
             truthClicked();
             this.repaint();

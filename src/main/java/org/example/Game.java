@@ -27,6 +27,8 @@ public class Game {
     public static final int CHALLENGE_SUCCESS = 1;
     public static final int CHALLENGE_FAILED = 2;
 
+    // Chase's Instance Variables
+    private int cheatQuestion;
 
 
 
@@ -145,18 +147,28 @@ public class Game {
                     lastTurnRank = ranks[rankIndex];
                     window.repaint();
                     System.out.println(currentPlayers.get(j).getName() + " played " + declaration + " " + ranks[rankIndex] + "s");
-                    System.out.println("Does anyone think that they are lying and want to call cheat? Answer 1 if yes or answer 2 if no");
-                    int cheatQuestion = input.nextInt();
+                    System.out.println("Does anyone think that they are lying and want to call cheat? Click either button to decide. ");
 
+                    // Added by chase
+                    // gets rid of the input and now works by detecting the change from the frontend.
+                    cheatQuestion = 0;
+
+                    while (cheatQuestion == 0) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     // If there is a challenger, then a follow-up question is asked to identify who the challenger is.
-                    if (cheatQuestion == 1) {
+                    if (cheatQuestion == 2) {
                         System.out.println("What player number is challenging?");
                         for (int i = 0; i < currentPlayers.size(); i++) {
                             System.out.println("Player " + i + ": " + currentPlayers.get(i).getName());
                         }
                         numChallengingPlayer = input.nextInt();
                         // Reprompts the user if the index of the player challenging is the same as the one being challenged
-                        while (numChallengingPlayer == j) {
+                        while (numChallengingPlayer == 1) {
                             System.out.println("A player can not challenge themselves. The challenge must be made by a different player number.");
                             System.out.println("What player number is challenging?");
                             numChallengingPlayer = input.nextInt();
@@ -215,6 +227,7 @@ public class Game {
                 }
                 window.repaint();
                 challengeStatus = NO_CHALLENGE;
+                cheatQuestion = 0;
             }
         }
         System.out.println("Congratulations " + currentPlayers.get(winningPlayer).getName() + " for winning this game!");
@@ -243,6 +256,15 @@ public class Game {
 
     public String getLastTurnRank() {
         return lastTurnRank;
+    }
+
+    // Chase's setter(s)
+    public void setCheatQuestion(int cheatQuestion) {
+        this.cheatQuestion = cheatQuestion;
+    }
+
+    public int getCheatQuestion() {
+        return cheatQuestion;
     }
 }
 

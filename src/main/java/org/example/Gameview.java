@@ -2,13 +2,16 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
+import java.awt.event.MouseEvent;
 
 import static org.example.Card.CARD_HEIGHT;
 import static org.example.Card.CARD_WIDTH;
 
-public class Gameview extends JFrame {
+// Implementing this class because it is a Java interface, so therfore I have to define all it's functions and implement.
+public class Gameview extends JFrame implements MouseListener {
     private Image tableImage;
     private Image cardBack;
     public static final int CARD_WIDTH = 100;
@@ -24,6 +27,12 @@ public class Gameview extends JFrame {
     private final int HORIZONTAL_SHIFT_BETWEEN_CARDS = 25;
     private Game backend;
 
+    // Chase's instance variables
+    public static final int BUTTON_START_X = 200;
+    public static final int BUTTON_START_Y = 650;
+    public static final int BUTTON_WIDTH = 200;
+    public static final int BUTTON_HEIGHT  = 100;
+
     public Gameview(Game backend) {
         this.backend = backend;
         currentPlayer = backend.getCurrentPlayerIndex();
@@ -36,6 +45,9 @@ public class Gameview extends JFrame {
         this.setTitle("CHEAT");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setVisible(true);
+
+        // Chase: adds mouse listener
+        this.addMouseListener(this);
     }
 
     public void paint(Graphics g) {
@@ -64,6 +76,8 @@ public class Gameview extends JFrame {
         else if (backend.getGameState() == Game.POSTGAME_STATE) {
             postGameDisplay(g);
         }
+
+
 
     }
 
@@ -129,9 +143,36 @@ public class Gameview extends JFrame {
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE));
             g.drawString(backend.getCurrentPlayers().get(currentPlayer).getName() + " played " + backend.getLastTurnQuantity() + " " + backend.getLastTurnRank() + "s", 100, 400);
             g.drawString("Do any of the other players want to challenge?", 100, 500);
+
+            // Call Cheats that Chase Implemented
+            callCheatDisplay(g, BUTTON_START_X, BUTTON_START_Y);
+
             g.setColor(Color.MAGENTA);
             g.setFont(new Font("Serif", Font.PLAIN, NORMAL_TEXT_SIZE - 10));
-            g.drawString("Please initiate or decline challenge using the console window...", 100, 600);
+            g.drawString("Please initiate or decline by selecting an option below...", 100, 600);
+        }
+
+        // Function for the creating buttons
+        public void callCheatDisplay(Graphics g, int x, int y) {
+            g.setColor(new Color(103, 199, 52));
+            g.fillRect(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+            g.setColor(Color.black);
+            g.setFont(new Font("Arial", Font.BOLD, 28));
+            g.drawString("Truth", x+ 65, y + 60);
+            g.setColor(new Color(199, 52, 52));
+            g.fillRect(x + 400, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+            g.setColor(Color.black);
+            g.drawString("Lie", x + 480, y +60);
+        }
+
+        // Functions to change the variable of the cheat button and set off the code in the frontend once
+        // buttons are clicked.
+        public void truthClicked() {
+            backend.setCheatQuestion(1);
+        }
+
+        public void falseClicked() {
+            backend.setCheatQuestion(2);
         }
 
     // Sets up display to prompt the user to transition to the next player's turn so that a player doesn't see the prior player's hand
@@ -156,7 +197,47 @@ public class Gameview extends JFrame {
             g.drawString(backend.getCurrentPlayers().get(winningPlayer).getName() + " wins!", (WINDOW_HEIGHT / 2) - 70, WINDOW_HEIGHT / 2);
         }
 
+    // Chase's code for the mouse events
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // Returns if not in the correct state for the rectangles
+        if (backend.getGameState() != Game.POSTTURN_STATE) {
+            return;
+        }
+        // Creates new rectangle for the buttons
+        Rectangle truth = new Rectangle(BUTTON_START_X, BUTTON_START_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        Rectangle lie = new Rectangle(BUTTON_START_X + 400, BUTTON_START_Y, BUTTON_WIDTH, BUTTON_HEIGHT);
+
+        // Checks if the x and y of the mouse click is in the rectangles, and if so, set off the function.
+        if (truth.contains(e.getX(), e.getY())) {
+            truthClicked();
+            this.repaint();
+        }
+        if (lie.contains(e.getX(), e.getY())) {
+            falseClicked();
+            this.repaint();
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
 
     }
+
+
 
 

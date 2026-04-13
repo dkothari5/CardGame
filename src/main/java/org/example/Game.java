@@ -217,9 +217,10 @@ public class Game {
 
 
                 // Shifts to end game screen when game is over
-                if (isGameOver) gameState = POSTGAME_STATE;
-                else
-                {
+                if (isGameOver) {
+                    gameState = POSTGAME_STATE;
+                    window.toggleRestartButton(true); // Reveal the button to the user
+                } else {
                     // this input was added so that a player won't see prior player's information on the display
                     System.out.println("Press 1 when the next player is ready for their turn.");
                     int readyInput = input.nextInt();
@@ -240,6 +241,46 @@ public class Game {
 
     public int getGameState() {
         return gameState;
+    }
+    public void restartGame() {
+        // 1. Hide the restart button
+        window.toggleRestartButton(false);
+
+        // 2. Re-create and shuffle the deck
+        String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+        int[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+        cardDeck = new Deck(ranks, suits, values);
+        cardDeck.shuffle();
+
+        // 3. Clear the central pile
+        pot.clear();
+
+        // 4. Empty all players' hands and deal new cards
+        for (Player p : currentPlayers) {
+            p.getHand().clear();
+        }
+
+        int playerIndex = 0;
+        while (!cardDeck.isEmpty()) {
+            currentPlayers.get(playerIndex).addCard(cardDeck.deal());
+            playerIndex = (playerIndex + 1) % currentPlayers.size();
+        }
+
+        // 5. Reset trackers and game state
+        gameState = INTURN_STATE;
+        currentPlayerIndex = 0;
+        challengeStatus = NO_CHALLENGE;
+        window.repaint();
+
+        System.out.println("\n==================================");
+        System.out.println("      A NEW ROUND HAS BEGUN!      ");
+        System.out.println("==================================\n");
+
+        // 6. Launch the game loop on a new thread.
+        // This is vital to prevent the console Scanner from freezing the Swing GUI.
+        new Thread(() -> {
+            playGame();
+        }).start();
     }
 
     /* This is the main method which initializes the Game object and calls the playGame method

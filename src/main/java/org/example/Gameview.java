@@ -23,6 +23,7 @@ public class Gameview extends JFrame {
     private final int LINEBREAK_VERTICAL_SHIFT = 25;
     private final int HORIZONTAL_SHIFT_BETWEEN_CARDS = 25;
     private Game backend;
+    private JButton restartButton;
 
     public Gameview(Game backend) {
         this.backend = backend;
@@ -35,7 +36,20 @@ public class Gameview extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("CHEAT");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        this.setLayout(null); // Allows us to position the button using absolute coordinates
+
+        // Setup Restart Button
+        restartButton = new JButton("Restart Game");
+        restartButton.setBounds((WINDOW_WIDTH / 2) - 150, (WINDOW_HEIGHT / 2) + 50, 300, 60);
+        restartButton.setFont(new Font("Arial", Font.BOLD, 24));
+        restartButton.setVisible(false); // Hidden by default
+        restartButton.addActionListener(e -> backend.restartGame());
+        this.add(restartButton);
+
         this.setVisible(true);
+    }
+    public void toggleRestartButton(boolean visible) {
+        restartButton.setVisible(visible);
     }
 
     public void paint(Graphics g) {
